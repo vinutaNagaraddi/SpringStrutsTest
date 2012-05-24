@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+<context:component-scan base-package="action.ch2"/>
+<context:property-override location="file:C:/prop.properties"/>
+
+<bean id="helloWorldService" class="service.HelloWorldService" >
+	<property name="message" value="#{helloWorldAction.message.toUpperCase()}"/>
+</bean>
+
+<bean id="mindreaderService" class="service.MindReaderService" autowire="byType">
+</bean>
+
+<bean id="poeticJuggler" class="action.ch1.PoeticJuggler" 
+	init-method="turnOnLights" destroy-method="turnOffLights" autowire="constructor">
+</bean>
+
+<bean id="sonnet29" class="action.ch1.Sonnet29" />
+<bean id="guitar" class="action.ch1.Guitar" primary="false" />
+<bean id="cymbal" class="action.ch1.Cymbal" primary="true"/>
+
+<bean id="oneManBand" class="action.ch1.OneManBand" autowire="byType">
+	<property name="listOfInstruments" >
+		<list>
+		  	<ref bean="guitar"/>
+		  	<ref bean="cymbal"/>
+		</list>
+	</property>
+	<property name="mapOfInstruments"><null/></property>
+</bean>
+
+
+<bean id="chapterOneAction" class="action.ch1.ChapterOneAction" >
+	<property name="performer" ref="poeticJuggler" />
+	<property name="oneManBand" ref="oneManBand" />
+	<property name="chosenInstrument" value="#{oneManBand.listOfInstruments[
+		T(java.lang.Math).random()*oneManBand.listOfInstruments.size()]}" />
+	<property name="oneManBandHasInstrumentsList" value="#{oneManBand.listOfInstruments!= null and
+			oneManBand.listOfInstruments?.size() gt 0}"/>
+	<property name="oneManBandHasInstrumentsMap" value="#{oneManBand.mapOfInstruments!= null and 
+			oneManBand.mapOfInstruments?.size() gt 0}"/>
+</bean>
+
+
+<bean id="helloWorldAction" class="action.HelloWorldAction" autowire="byName">
+	<property name="message" value="Message for HelloWorld Action" />
+</bean>
+
+<bean id="mindReaderAction" class="action.ch4.MindReaderAction" autowire="byName"/>
+<bean id="loginAction" class="action.ch9.LoginAction" />
+
+<bean id="oddsAndEndsAction" class="action.ch14.OddsAndEndsAction" autowire="byName"/>
+<bean id="oddsAndEndsService" class="service.OddsAndEndsServiceImpl" autowire="byName"/>
+<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<property name="host" value="smtp.gmail.com" />
+	<property name="port" value="587" />
+	<property name="username" value="${email.username}"/>
+	<property name="password" value="vinutanagaraddi"/>
+	<property name="javaMailProperties">  
+             <props>  
+                 <prop key="mail.transport.protocol">smtp</prop>  
+                 <prop key="mail.smtp.auth">true</prop>  
+                 <prop key="mail.smtp.starttls.enable">true</prop>  
+                 <prop key="mail.debug">true</prop>  
+             </props>  
+    </property>  
+</bean>
+
+</beans>

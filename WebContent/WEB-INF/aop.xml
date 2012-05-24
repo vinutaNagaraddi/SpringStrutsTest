@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+          	http://www.springframework.org/schema/aop
+    		http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+<bean id="audience"  class="action.ch4.Audience"/>
+<bean id="poeticAudience" class="action.ch4.PoeticAudience"/>
+<bean id="magician" class="action.ch4.Magician"/>
+<bean id="volunteer" class="action.ch4.Volunteer"/>
+<!--
+<aop:aspectj-autoproxy/>
+-->
+
+<aop:config>
+	<aop:advisor
+		pointcut="execution(* *..DatabaseService.*(..))"
+		advice-ref="txAdvice"/>
+		
+  	<aop:aspect ref="audience">
+  		<aop:pointcut id="performance1" expression=
+  		"execution( * action.ch1.ChapterOneAction.execute())"/>
+  		<aop:pointcut id="performance" expression=
+  		"execution( * action.ch1.Instrument.play()) and bean(guitar)"/>
+  		<aop:before pointcut-ref="performance1"
+  			method="takeSeats"/>
+  		<aop:after pointcut-ref="performance1"
+  			method="showOver"/>
+  		<aop:after-returning pointcut-ref="performance1"
+  			method="applaud"/>
+  		<aop:after-throwing pointcut-ref="performance1"
+  			method="demandRefund"/>
+  	</aop:aspect>
+  	
+  	<aop:aspect ref="poeticAudience">
+  		<aop:pointcut id="thisPC" expression=
+  		"this(action.ch1.Poem) and within(action.ch1.*)"/>
+  		<aop:before pointcut-ref="thisPC"
+  			method="takeSeats"/>
+  		<aop:after pointcut-ref="thisPC"
+  			method="showOver"/>
+  	</aop:aspect>
+  	
+  	<aop:aspect ref="magician">
+  		<aop:pointcut id="thinking"
+  			expression="execution( * action.ch4.Thinker.thinkOfSomething(String))
+  			and args(thoughts)"/>
+  		<aop:before pointcut-ref="thinking"
+  			method="interceptThoughts"
+  			arg-names="thoughts"/>
+  	</aop:aspect>
+  	
+  	<aop:aspect ref="magician">
+  		<aop:pointcut id="thinkingOfNumber"
+  			expression="execution( * action.ch4.Thinker.setSecretNumber(Integer))
+  			and args(number)"/>
+  		<aop:before pointcut-ref="thinkingOfNumber"
+  			method="interceptNumber"
+  			arg-names="number"/>
+  	</aop:aspect>
+  	
+  	<aop:aspect>
+  		<aop:declare-parents
+  			types-matching="action.ch1.PoeticJuggler"
+  			implement-interface="action.ch4.Contestant"
+  			default-impl="action.ch4.GraciousContestant"/>
+  	</aop:aspect>
+  	
+</aop:config>
+
+</beans>
+

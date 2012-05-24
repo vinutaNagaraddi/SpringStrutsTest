@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<constant name="struts.devMode" value="true" />
+
+	<package name="basicPackage" extends="struts-default">
+
+        <action name="index" class="helloWorldAction" method="startApp">
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+		<action name="hello" class="helloWorldAction" method="execute">
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+		<action name="chapterOne" class="chapterOneAction" method="execute">
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+		<action name="mindReader" class="mindReaderAction" method="execute">
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+		<action name="login" class="loginAction" method="execute">
+			<result>/jsp/Login.jsp</result>
+		</action>
+		
+		<action name="helloMessageAction" class="helloMessageAction" method="execute">
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+		<action name="JMSTest" class="JMSAction" method="execute">
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+		<action name="rpcJmsService" class="JMSAction" method="rpcJmsService">
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+		<action name="email" class="oddsAndEndsAction" >
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+		<action name="jndi" class="oddsAndEndsAction" method="testJNDI">
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+	</package>
+	
+	<package name="databaseWork" extends="basicPackage">
+	
+		<action name="springAuth" class="helloWorldAction" method="execute">
+			<result>/jsp/SpringHello.jsp</result>
+		</action>
+		
+		<action name="addPerson" class="databaseAction" method="addPerson">
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+		<action name="getPerson" class="databaseAction" method="getPerson">
+			<result>/HelloWorld.jsp</result>
+		</action>
+		
+		<action name="updatePerson" class="databaseAction" method="updatePerson">
+			<result>/HelloWorld.jsp</result>
+		</action>
+	</package>
+</struts>
